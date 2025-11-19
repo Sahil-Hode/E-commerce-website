@@ -9,24 +9,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <style>
+        :root {
+            --mobile-breakpoint: 768px;
+            --small-mobile-breakpoint: 480px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(15px, 4vw, 20px);
+        }
+
         .product-container {
             max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
+            margin: clamp(20px, 5vw, 40px) auto;
+            padding: 0 clamp(15px, 4vw, 20px);
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            gap: clamp(30px, 6vw, 60px);
         }
 
         .product-images {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: clamp(12px, 3vw, 16px);
         }
 
         .main-image {
             width: 100%;
-            height: 400px;
+            height: clamp(250px, 50vw, 400px);
             object-fit: cover;
             border-radius: var(--card-radius);
             border: 1px solid var(--border);
@@ -34,18 +45,30 @@
 
         .thumbnail-images {
             display: flex;
-            gap: 12px;
+            gap: clamp(8px, 2vw, 12px);
             overflow-x: auto;
+            padding: 4px 0;
+            scrollbar-width: thin;
+        }
+
+        .thumbnail-images::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .thumbnail-images::-webkit-scrollbar-thumb {
+            background-color: var(--border);
+            border-radius: 3px;
         }
 
         .thumbnail {
-            width: 80px;
-            height: 80px;
+            width: clamp(60px, 15vw, 80px);
+            height: clamp(60px, 15vw, 80px);
             object-fit: cover;
             border-radius: var(--card-radius);
             border: 2px solid transparent;
             cursor: pointer;
             transition: border-color 0.3s ease;
+            flex-shrink: 0;
         }
 
         .thumbnail:hover,
@@ -56,52 +79,79 @@
         .product-info {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: clamp(16px, 3vw, 20px);
         }
 
         .product-badges {
             display: flex;
-            gap: 8px;
+            gap: clamp(6px, 1.5vw, 8px);
             flex-wrap: wrap;
         }
 
+        .badge {
+            padding: clamp(4px, 1vw, 6px) clamp(8px, 2vw, 12px);
+            border-radius: 16px;
+            font-size: clamp(12px, 2.5vw, 14px);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge.popular {
+            background-color: rgba(255, 204, 0, 0.2);
+            color: var(--accent-yellow);
+        }
+
+        .badge.new {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: #2196f3;
+        }
+
+        .badge.sale {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--error);
+        }
+
         .product-title {
-            font-size: 28px;
+            font-size: clamp(20px, 5vw, 28px);
             font-weight: 600;
             color: var(--text);
             line-height: 1.3;
+            margin: 0;
         }
 
         .product-rating {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: clamp(8px, 2vw, 12px);
+            flex-wrap: wrap;
         }
 
         .rating-stars {
             color: var(--accent-yellow);
-            font-size: 18px;
+            font-size: clamp(16px, 3.5vw, 18px);
         }
 
         .rating-text {
             color: var(--text-muted);
+            font-size: clamp(14px, 3vw, 16px);
         }
 
         .product-price {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin: 16px 0;
+            gap: clamp(12px, 3vw, 16px);
+            margin: clamp(12px, 3vw, 16px) 0;
+            flex-wrap: wrap;
         }
 
         .current-price {
-            font-size: 32px;
+            font-size: clamp(24px, 6vw, 32px);
             font-weight: 700;
             color: var(--text);
         }
 
         .original-price {
-            font-size: 20px;
+            font-size: clamp(16px, 4vw, 20px);
             color: var(--text-muted);
             text-decoration: line-through;
         }
@@ -109,16 +159,17 @@
         .discount-badge {
             background-color: var(--success);
             color: white;
-            padding: 6px 12px;
+            padding: clamp(4px, 1vw, 6px) clamp(8px, 2vw, 12px);
             border-radius: 16px;
-            font-size: 14px;
+            font-size: clamp(12px, 2.5vw, 14px);
             font-weight: 600;
         }
 
         .stock-info {
-            padding: 12px 16px;
+            padding: clamp(10px, 2.5vw, 12px) clamp(12px, 3vw, 16px);
             border-radius: var(--card-radius);
-            margin: 16px 0;
+            margin: clamp(12px, 3vw, 16px) 0;
+            font-size: clamp(14px, 3vw, 16px);
         }
 
         .stock-info.in-stock {
@@ -136,20 +187,28 @@
         .product-description {
             color: var(--text-muted);
             line-height: 1.6;
-            font-size: 16px;
+            font-size: clamp(14px, 3vw, 16px);
+            margin: 0;
         }
 
         .product-actions {
             display: flex;
-            gap: 16px;
-            margin-top: 24px;
+            gap: clamp(12px, 3vw, 16px);
+            margin-top: clamp(20px, 4vw, 24px);
         }
 
         .quantity-selector {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: clamp(8px, 2vw, 12px);
+            margin-bottom: clamp(12px, 3vw, 16px);
+            flex-wrap: wrap;
+        }
+
+        .quantity-label {
+            font-size: clamp(14px, 3vw, 16px);
+            color: var(--text);
+            font-weight: 500;
         }
 
         .quantity-controls {
@@ -161,8 +220,8 @@
         }
 
         .quantity-btn {
-            width: 40px;
-            height: 40px;
+            width: clamp(35px, 8vw, 40px);
+            height: clamp(35px, 8vw, 40px);
             border: none;
             background-color: var(--bg-elev);
             color: var(--text);
@@ -170,7 +229,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: clamp(16px, 3.5vw, 18px);
         }
 
         .quantity-btn:hover {
@@ -178,25 +237,32 @@
             color: var(--text-dark);
         }
 
+        .quantity-btn:disabled {
+            background-color: var(--bg-elev);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
         .quantity-input {
-            width: 60px;
-            height: 40px;
+            width: clamp(50px, 12vw, 60px);
+            height: clamp(35px, 8vw, 40px);
             border: none;
             background-color: var(--bg-card);
             color: var(--text);
             text-align: center;
-            font-size: 16px;
+            font-size: clamp(14px, 3vw, 16px);
         }
 
         .action-btn {
             flex: 1;
-            padding: 16px 24px;
+            padding: clamp(12px, 3vw, 16px) clamp(20px, 4vw, 24px);
             border: none;
             border-radius: var(--card-radius);
-            font-size: 16px;
+            font-size: clamp(14px, 3vw, 16px);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            min-width: 0;
         }
 
         .add-to-cart {
@@ -206,11 +272,13 @@
 
         .add-to-cart:hover {
             background-color: var(--accent-yellow-hover);
+            transform: translateY(-2px);
         }
 
         .add-to-cart:disabled {
             background-color: var(--text-muted);
             cursor: not-allowed;
+            transform: none;
         }
 
         .buy-now {
@@ -220,55 +288,166 @@
 
         .buy-now:hover {
             background-color: #45a049;
+            transform: translateY(-2px);
         }
 
         .buy-now:disabled {
             background-color: var(--text-muted);
             cursor: not-allowed;
+            transform: none;
         }
 
         .back-link {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: clamp(6px, 1.5vw, 8px);
             color: var(--accent-yellow);
             text-decoration: none;
-            margin-bottom: 20px;
+            margin: clamp(15px, 3vw, 20px) 0;
             font-weight: 500;
+            font-size: clamp(14px, 3vw, 16px);
+            padding: 8px 0;
         }
 
         .back-link:hover {
             text-decoration: underline;
         }
 
+        .back-link svg {
+            width: clamp(14px, 3vw, 16px);
+            height: clamp(14px, 3vw, 16px);
+        }
+
         .product-not-found {
             text-align: center;
-            padding: 60px 20px;
+            padding: clamp(40px, 10vw, 60px) 20px;
             color: var(--text-muted);
         }
 
         .product-not-found h2 {
             color: var(--text);
             margin-bottom: 16px;
+            font-size: clamp(20px, 5vw, 24px);
         }
 
+        /* Additional Product Details */
+        .product-details {
+            margin-top: clamp(20px, 4vw, 30px);
+            padding-top: clamp(20px, 4vw, 30px);
+            border-top: 1px solid var(--border);
+        }
+
+        .details-title {
+            font-size: clamp(18px, 4vw, 20px);
+            color: var(--text);
+            margin-bottom: clamp(12px, 3vw, 16px);
+            font-weight: 600;
+        }
+
+        .details-list {
+            display: grid;
+            gap: clamp(8px, 2vw, 12px);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: clamp(8px, 2vw, 10px) 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: var(--text);
+            text-align: right;
+        }
+
+        /* Tablet Styles */
         @media (max-width: 768px) {
             .product-container {
                 grid-template-columns: 1fr;
-                gap: 30px;
-                margin: 20px auto;
-            }
-
-            .product-title {
-                font-size: 24px;
-            }
-
-            .current-price {
-                font-size: 28px;
+                gap: clamp(20px, 4vw, 30px);
             }
 
             .product-actions {
                 flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+            .thumbnail-images {
+                justify-content: center;
+            }
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 480px) {
+            .product-price {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .quantity-selector {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .quantity-controls {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .quantity-input {
+                flex: 1;
+                max-width: 80px;
+            }
+
+            .detail-item {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .detail-value {
+                text-align: left;
+            }
+        }
+
+        /* Small Mobile Styles */
+        @media (max-width: 360px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .product-container {
+                padding: 0 10px;
+            }
+
+            .thumbnail-images {
+                justify-content: flex-start;
+            }
+
+            .action-btn {
+                padding: 14px 20px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .back-link,
+            .product-actions {
+                display: none;
+            }
+
+            .product-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .main-image {
@@ -288,11 +467,167 @@
 
         <div id="productContainer">
             <!-- Product details will be rendered here -->
+            <div class="product-container">
+                <div class="product-images">
+                    <img src="https://via.placeholder.com/600x400" alt="Product Image" class="main-image" id="mainImage">
+                    <div class="thumbnail-images">
+                        <img src="https://via.placeholder.com/150x150" alt="Thumbnail 1" class="thumbnail active" data-image="https://via.placeholder.com/600x400">
+                        <img src="https://via.placeholder.com/150x150/FF5733/FFFFFF" alt="Thumbnail 2" class="thumbnail" data-image="https://via.placeholder.com/600x400/FF5733/FFFFFF">
+                        <img src="https://via.placeholder.com/150x150/33FF57/FFFFFF" alt="Thumbnail 3" class="thumbnail" data-image="https://via.placeholder.com/600x400/33FF57/FFFFFF">
+                        <img src="https://via.placeholder.com/150x150/3357FF/FFFFFF" alt="Thumbnail 4" class="thumbnail" data-image="https://via.placeholder.com/600x400/3357FF/FFFFFF">
+                    </div>
+                </div>
+                
+                <div class="product-info">
+                    <div class="product-badges">
+                        <span class="badge popular">Popular</span>
+                        <span class="badge new">New Arrival</span>
+                    </div>
+                    
+                    <h1 class="product-title" id="productTitle">Premium Ergonomic Office Chair</h1>
+                    
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            ★★★★☆
+                        </div>
+                        <span class="rating-text">4.2 (128 reviews)</span>
+                    </div>
+                    
+                    <div class="product-price">
+                        <span class="current-price" id="currentPrice">₹12,999</span>
+                        <span class="original-price" id="originalPrice">₹15,999</span>
+                        <span class="discount-badge">19% OFF</span>
+                    </div>
+                    
+                    <div class="stock-info in-stock">
+                        ✓ In Stock - Ready to Ship
+                    </div>
+                    
+                    <p class="product-description" id="productDescription">
+                        This premium ergonomic office chair features advanced lumbar support, 
+                        adjustable armrests, and breathable mesh backrest. Perfect for long 
+                        working hours with its comfortable padding and 360-degree swivel.
+                    </p>
+                    
+                    <div class="quantity-selector">
+                        <span class="quantity-label">Quantity:</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" id="decreaseQty">-</button>
+                            <input type="number" class="quantity-input" id="quantityInput" value="1" min="1" max="10">
+                            <button class="quantity-btn" id="increaseQty">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <button class="action-btn add-to-cart" id="addToCartBtn">Add to Cart</button>
+                        <button class="action-btn buy-now" id="buyNowBtn">Buy Now</button>
+                    </div>
+                    
+                    <div class="product-details">
+                        <h3 class="details-title">Product Details</h3>
+                        <div class="details-list">
+                            <div class="detail-item">
+                                <span class="detail-label">Material:</span>
+                                <span class="detail-value">Premium Mesh & PU Leather</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Color:</span>
+                                <span class="detail-value">Black</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Weight Capacity:</span>
+                                <span class="detail-value">150 kg</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Warranty:</span>
+                                <span class="detail-value">2 Years</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="products.js"></script>
     <script src="cart.js"></script>
     <script src="productpage.js"></script>
+    <script>
+        // Basic responsive functionality for product page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thumbnail image switching
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            const mainImage = document.getElementById('mainImage');
+            
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', function() {
+                    // Remove active class from all thumbnails
+                    thumbnails.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked thumbnail
+                    this.classList.add('active');
+                    
+                    // Update main image
+                    const newImageSrc = this.getAttribute('data-image');
+                    mainImage.src = newImageSrc;
+                    mainImage.alt = this.alt;
+                });
+            });
+            
+            // Quantity controls
+            const decreaseBtn = document.getElementById('decreaseQty');
+            const increaseBtn = document.getElementById('increaseQty');
+            const quantityInput = document.getElementById('quantityInput');
+            
+            decreaseBtn.addEventListener('click', function() {
+                let currentValue = parseInt(quantityInput.value);
+                if (currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                }
+            });
+            
+            increaseBtn.addEventListener('click', function() {
+                let currentValue = parseInt(quantityInput.value);
+                const maxValue = parseInt(quantityInput.max);
+                if (currentValue < maxValue) {
+                    quantityInput.value = currentValue + 1;
+                }
+            });
+            
+            // Input validation for quantity
+            quantityInput.addEventListener('change', function() {
+                let value = parseInt(this.value);
+                const min = parseInt(this.min);
+                const max = parseInt(this.max);
+                
+                if (isNaN(value) || value < min) {
+                    this.value = min;
+                } else if (value > max) {
+                    this.value = max;
+                }
+            });
+            
+            // Add to cart functionality
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            addToCartBtn.addEventListener('click', function() {
+                const quantity = parseInt(quantityInput.value);
+                alert(`Added ${quantity} item(s) to cart!`);
+                // In a real app, this would call a function from cart.js
+            });
+            
+            // Buy now functionality
+            const buyNowBtn = document.getElementById('buyNowBtn');
+            buyNowBtn.addEventListener('click', function() {
+                const quantity = parseInt(quantityInput.value);
+                alert(`Proceeding to checkout with ${quantity} item(s)!`);
+                // In a real app, this would redirect to checkout page
+            });
+            
+            // Handle window resize for responsive adjustments
+            window.addEventListener('resize', function() {
+                // Any responsive adjustments that need to happen on resize
+            });
+        });
+    </script>
 </body>
 </html>

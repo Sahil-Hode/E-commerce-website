@@ -8,12 +8,370 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        :root {
+            --mobile-breakpoint: 768px;
+            --small-mobile-breakpoint: 480px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-elev);
+            font-family: 'Roboto', sans-serif;
+            padding: clamp(15px, 4vw, 20px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            background-color: var(--bg-card);
+            border-radius: var(--card-radius);
+            padding: clamp(25px, 6vw, 40px);
+            box-shadow: var(--shadow);
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: clamp(8px, 2vw, 12px);
+            font-weight: 700;
+            color: var(--accent-yellow);
+            margin-bottom: clamp(15px, 4vw, 20px);
+            justify-content: center;
+        }
+
+        .logo svg {
+            width: clamp(24px, 6vw, 32px);
+            height: clamp(24px, 6vw, 32px);
+        }
+
+        .logo span {
+            font-size: clamp(20px, 5vw, 28px);
+        }
+
+        .form-title {
+            text-align: center;
+            color: var(--text);
+            font-size: clamp(22px, 5.5vw, 28px);
+            font-weight: 600;
+            margin: 0 0 clamp(20px, 5vw, 30px) 0;
+        }
+
+        .form-group {
+            margin-bottom: clamp(16px, 4vw, 20px);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: clamp(6px, 1.5vw, 8px);
+            color: var(--text);
+            font-weight: 500;
+            font-size: clamp(14px, 3.5vw, 16px);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: clamp(12px, 3vw, 16px) clamp(14px, 3.5vw, 18px);
+            border: 1px solid var(--border);
+            border-radius: var(--card-radius);
+            background-color: var(--bg-elev);
+            color: var(--text);
+            font-size: clamp(14px, 3.5vw, 16px);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-yellow);
+            box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+        }
+
+        .form-group input:invalid:not(:focus):not(:placeholder-shown) {
+            border-color: var(--error);
+        }
+
+        .form-btn {
+            width: 100%;
+            padding: clamp(14px, 3.5vw, 16px);
+            background-color: var(--accent-yellow);
+            color: var(--text-dark);
+            border: none;
+            border-radius: var(--card-radius);
+            font-size: clamp(15px, 3.5vw, 16px);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin: clamp(20px, 5vw, 30px) 0;
+        }
+
+        .form-btn:hover {
+            background-color: var(--accent-yellow-hover);
+            transform: translateY(-2px);
+        }
+
+        .form-btn:active {
+            transform: translateY(0);
+        }
+
+        .form-link {
+            text-align: center;
+            margin-bottom: clamp(12px, 3vw, 16px);
+            font-size: clamp(14px, 3.5vw, 16px);
+        }
+
+        .form-link:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-link a {
+            color: var(--accent-yellow);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .form-link a:hover {
+            text-decoration: underline;
+            color: var(--accent-yellow-hover);
+        }
+
+        /* Password strength indicator */
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            border-radius: 2px;
+            background-color: var(--border);
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background-color 0.3s;
+        }
+
+        .strength-weak {
+            background-color: var(--error);
+            width: 25%;
+        }
+
+        .strength-medium {
+            background-color: #ff9800;
+            width: 50%;
+        }
+
+        .strength-strong {
+            background-color: var(--success);
+            width: 100%;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: var(--error);
+            font-size: clamp(12px, 3vw, 14px);
+            margin-top: 6px;
+            display: none;
+        }
+
+        /* Success message styling */
+        .success-message {
+            color: var(--success);
+            font-size: clamp(12px, 3vw, 14px);
+            margin-top: 6px;
+            display: none;
+        }
+
+        /* Terms and conditions */
+        .terms-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .terms-checkbox input {
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .terms-text {
+            font-size: clamp(13px, 3vw, 14px);
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .terms-text a {
+            color: var(--accent-yellow);
+            text-decoration: none;
+        }
+
+        .terms-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Social login options */
+        .social-login {
+            margin: clamp(20px, 5vw, 30px) 0;
+            text-align: center;
+        }
+
+        .social-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .social-divider::before,
+        .social-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--border);
+        }
+
+        .social-divider span {
+            padding: 0 12px;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .social-btn {
+            flex: 1;
+            max-width: 120px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-elev);
+            border-radius: var(--card-radius);
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-btn:hover {
+            background-color: var(--bg-card);
+        }
+
+        .social-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Tablet Styles */
+        @media (max-width: 768px) {
+            .form-container {
+                padding: clamp(20px, 5vw, 30px);
+            }
+
+            .social-buttons {
+                flex-wrap: wrap;
+            }
+
+            .social-btn {
+                max-width: calc(50% - 6px);
+            }
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+                padding-top: clamp(20px, 8vw, 40px);
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .social-buttons {
+                flex-direction: column;
+            }
+
+            .social-btn {
+                max-width: 100%;
+            }
+        }
+
+        /* Small Mobile Styles */
+        @media (max-width: 360px) {
+            .form-container {
+                padding: 15px;
+            }
+
+            .form-title {
+                font-size: 20px;
+            }
+
+            .logo span {
+                font-size: 18px;
+            }
+        }
+
+        /* Focus styles for accessibility */
+        .form-btn:focus,
+        .social-btn:focus {
+            outline: 2px solid var(--accent-yellow);
+            outline-offset: 2px;
+        }
+
+        /* Loading state */
+        .form-btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .form-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid transparent;
+            border-top-color: var(--text-dark);
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+        }
+
+        @keyframes button-loading-spinner {
+            from {
+                transform: rotate(0turn);
+            }
+            to {
+                transform: rotate(1turn);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="form-container">
-            <div class="logo" style="justify-content: center; margin-bottom: 20px;">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
                 </svg>
                 <span>WorkShala</span>
@@ -24,25 +382,61 @@
             <form id="signupForm">
                 <div class="form-group">
                     <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                    <div class="error-message" id="nameError">Please enter a valid name</div>
                 </div>
                 
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email address">
+                    <div class="error-message" id="emailError">Please enter a valid email address</div>
                 </div>
                 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" required placeholder="Create a strong password">
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="passwordStrength"></div>
+                    </div>
+                    <div class="error-message" id="passwordError">Password must be at least 8 characters</div>
                 </div>
                 
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+                    <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
                 </div>
+
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms" class="terms-text">
+                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                </div>
+                <div class="error-message" id="termsError">You must agree to the terms and conditions</div>
                 
-                <button type="submit" class="form-btn">Sign Up</button>
+                <button type="submit" class="form-btn" id="submitBtn">Sign Up</button>
+                
+                <div class="social-login">
+                    <div class="social-divider">
+                        <span>Or sign up with</span>
+                    </div>
+                    <div class="social-buttons">
+                        <button type="button" class="social-btn" aria-label="Sign up with Google">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                        </button>
+                        <button type="button" class="social-btn" aria-label="Sign up with Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
                 
                 <div class="form-link">
                     Already have an account? <a href="login.html">Login here</a>
@@ -56,5 +450,107 @@
     </div>
 
     <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const signupForm = document.getElementById('signupForm');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const passwordStrength = document.getElementById('passwordStrength');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Password strength indicator
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                
+                if (password.length >= 8) strength++;
+                if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+                if (password.match(/\d/)) strength++;
+                if (password.match(/[^a-zA-Z\d]/)) strength++;
+                
+                // Update strength bar
+                passwordStrength.className = 'password-strength-bar';
+                if (strength === 0) {
+                    // No class added for empty password
+                } else if (strength <= 2) {
+                    passwordStrength.classList.add('strength-weak');
+                } else if (strength === 3) {
+                    passwordStrength.classList.add('strength-medium');
+                } else {
+                    passwordStrength.classList.add('strength-strong');
+                }
+            });
+            
+            // Form validation
+            signupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Reset errors
+                document.querySelectorAll('.error-message').forEach(el => {
+                    el.style.display = 'none';
+                });
+                
+                let isValid = true;
+                
+                // Name validation
+                const name = document.getElementById('name').value.trim();
+                if (name.length < 2) {
+                    document.getElementById('nameError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Email validation
+                const email = document.getElementById('email').value;
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    document.getElementById('emailError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Password validation
+                const password = passwordInput.value;
+                if (password.length < 8) {
+                    document.getElementById('passwordError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Confirm password validation
+                if (password !== confirmPasswordInput.value) {
+                    document.getElementById('confirmPasswordError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Terms validation
+                if (!document.getElementById('terms').checked) {
+                    document.getElementById('termsError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                    // Show loading state
+                    submitBtn.classList.add('loading');
+                    submitBtn.disabled = true;
+                    
+                    // Simulate API call
+                    setTimeout(function() {
+                        submitBtn.classList.remove('loading');
+                        submitBtn.disabled = false;
+                        
+                        // In a real app, this would redirect or show success message
+                        alert('Account created successfully! Redirecting to login...');
+                        window.location.href = 'login.html';
+                    }, 1500);
+                }
+            });
+            
+            // Social login buttons
+            document.querySelectorAll('.social-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const platform = this.getAttribute('aria-label').replace('Sign up with ', '');
+                    alert(`In a real application, this would redirect to ${platform} authentication`);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
